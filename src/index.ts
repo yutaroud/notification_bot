@@ -10,10 +10,15 @@ const convertInteger = (stringNum: string) => {
   return stringNum.replace(/[^0-9]/g, "");
 };
 
-observer.getAmazonPrice(envItemId).then((price: string) => {
-  if (convertInteger(price) < envTargetPrice) {
-    notifier.postNotification(convertInteger(price));
-  } else {
-    console.log("まだ目標金額より高いです。");
-  }
-});
+const notifyTargetPrice = () => {
+  observer.getAmazonPrice(envItemId).then((price: string) => {
+    if (convertInteger(price) < envTargetPrice) {
+      notifier.postNotification(convertInteger(price));
+    } else {
+      console.log("まだ目標金額より高いです。");
+    }
+  });
+};
+
+const cron = require("node-cron");
+cron.schedule("*/5 * * * *", () => notifyTargetPrice()); //5分ごとに実行
