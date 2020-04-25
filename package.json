@@ -1,10 +1,16 @@
 {
-
   "main": "dist/index.js",
   "dependencies": {
+    "@line/bot-sdk": "^6.8.4",
     "@types/node": "^13.13.2",
+    "@types/puppeteer": "^2.0.1",
+    "dotenv": "^8.2.0",
+    "husky": "^4.2.5",
     "node-cron": "^2.0.3",
     "npm-run-all": "^4.1.5",
+    "prettier": "^2.0.5",
+    "pretty-quick": "^2.0.1",
+    "puppeteer": "^3.0.1",
     "rimraf": "^3.0.2",
     "ts-node": "^8.9.0",
     "ts-node-dev": "^1.0.0-pre.44",
@@ -17,5 +23,10 @@
     "tsc": "tsc",
     "build": "npm-run-all clean tsc",
     "start": "node ."
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged"
+    }
   }
 }
