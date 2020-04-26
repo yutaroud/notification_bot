@@ -16,7 +16,7 @@ class Observation {
         .evaluate((body) => body.innerText, bodyHandle)
         .then((text) => {
           const result = text.match("￥[0-9]{2},[0-9]{3}"); //価格に応じて変更の必要有り
-          return result[0];
+          return result ? result[0] : "値が取得できませんでした。";
         });
       await page.setViewport({
         width: 375,
