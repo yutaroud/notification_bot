@@ -20,7 +20,7 @@ const notifyTargetPrice = () => {
     if (convertInteger(price) < envTargetPrice && convertInteger(price) !== 0) {
       notifier.postNotification(price);
     } else {
-      console.log("まだ目標金額より高いです。");
+      console.log("まだ目標金額より高いです。" + price);
     }
   });
 };
