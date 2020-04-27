@@ -29,6 +29,23 @@ class Observation {
       console.error(e);
     }
   }
+  async checkRakutenItem(itemId: string) {
+    try {
+      const browser = await puppeteer.launch();
+      const page = await browser.newPage();
+      await page.emulate(iPhone);
+      await page.goto("https://books.rakuten.co.jp/rb/" + itemId, {
+        waitUntil: "networkidle0",
+      });
+      const targetClass = ".new_addToCart";
+      const status = await page.$(targetClass);
+      await browser.close();
+      return status != null;
+    } catch (e) {
+      console.error(e);
+      return false;
+    }
+  }
 }
 
 export { Observation };

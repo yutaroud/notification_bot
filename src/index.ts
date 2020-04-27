@@ -4,7 +4,12 @@ import { Notification } from "./Notification";
 
 let observer = new Observation();
 let notifier = new Notification();
-const envItemId = process.env.itemId ? process.env.itemId : "";
+const envAmazonItemId = process.env.AMAZON_ITEM_ID
+  ? process.env.AMAZON_ITEM_ID
+  : "";
+const envRakutenItemId = process.env.RAKUTEN_ITEM_ID
+  ? process.env.RAKUTEN_ITEM_ID
+  : "";
 const envTargetPrice = process.env.TARGET_PRICE ? process.env.TARGET_PRICE : 0;
 const convertInteger = (stringNum: string) => {
   const replaceNum = stringNum.replace(/[^0-9]/g, "");
@@ -16,7 +21,7 @@ const convertInteger = (stringNum: string) => {
 };
 
 const notifyTargetPrice = () => {
-  observer.getAmazonPrice(envItemId).then((price: string) => {
+  observer.getAmazonPrice(envAmazonItemId).then((price: string) => {
     if (convertInteger(price) < envTargetPrice && convertInteger(price) !== 0) {
       notifier.postNotification(price);
     } else {
@@ -25,5 +30,16 @@ const notifyTargetPrice = () => {
   });
 };
 
+const notifyRakutenStatus = () => {
+  observer.checkRakutenItem(envRakutenItemId).then((status: boolean) => {
+    if (status) {
+      notifier.postNotification("購入可能になっています！");
+    } else {
+      console.log("まだ購入可能になっていないです。");
+    }
+  });
+};
+
 const cron = require("node-cron");
 cron.schedule("*/5 * * * *", () => notifyTargetPrice()); //5分ごとに実行
+cron.schedule("*/1 * * * *", () => notifyRakutenStatus()); //1分毎に実行
