@@ -13,8 +13,8 @@ const envRakutenItemId = process.env.RAKUTEN_ITEM_ID
 const envTargetPrice = process.env.TARGET_PRICE ? process.env.TARGET_PRICE : 0;
 const convertInteger = (stringNum: string) => {
   const replaceNum = stringNum.replace(/[^0-9]/g, "");
-  if (typeof replaceNum === "number") {
-    return replaceNum;
+  if (replaceNum !== "") {
+    return parseInt(replaceNum);
   } else {
     return 0;
   }
