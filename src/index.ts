@@ -1,6 +1,7 @@
 require("dotenv").config();
 import { Observation } from "./Observation";
 import { Notification } from "./Notification";
+import { exec } from "child_process";
 
 let observer = new Observation();
 let notifier = new Notification();
@@ -40,6 +41,20 @@ const notifyRakutenStatus = () => {
   });
 };
 
+const killChromeZombieProcess = () => {
+  exec(
+    `ps aux | grep chrome | grep -v grep | awk '{ print "kill -9", $2}' | sh`,
+    (err, stdout, stderr) => {
+      if (err) {
+        console.log(`stderr: ${stderr}`);
+        return;
+      }
+      console.log(`stdout: ${stdout}`);
+    }
+  );
+};
+
 const cron = require("node-cron");
 cron.schedule("*/5 * * * *", () => notifyTargetPrice()); //5分ごとに実行
 cron.schedule("*/1 * * * *", () => notifyRakutenStatus()); //1分毎に実行
+cron.schedule("*/11 * * * *", () => killChromeZombieProcess()); //11分毎に実行
