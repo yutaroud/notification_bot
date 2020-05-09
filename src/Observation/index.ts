@@ -46,6 +46,31 @@ class Observation {
       return false;
     }
   }
+
+  async checkPayPayMallItem(
+    itemName: string,
+    minPrice: string,
+    maxPrice: string
+  ) {
+    try {
+      const browser = await puppeteer.launch();
+      const page = await browser.newPage();
+      await page.emulate(iPhone);
+      await page.goto(
+        `https://paypaymall.yahoo.co.jp/search?ss_first=1&p=${itemName}&ei=UTF-8&pf=${minPrice}&pt=${maxPrice}`,
+        {
+          waitUntil: "networkidle0",
+        }
+      );
+      const targetClass = "SearchList_item100";
+      const status = await page.$(targetClass);
+      await browser.close();
+      return status != null;
+    } catch (e) {
+      console.error(e);
+      return false;
+    }
+  }
 }
 
 export { Observation };
